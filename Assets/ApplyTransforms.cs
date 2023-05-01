@@ -52,8 +52,13 @@ public class ApplyTransforms : MonoBehaviour
     void CreateRing(string plane)
     {
         // TODO: See if I can refactor the duplicate code down here once I have functionality in place
-        // First, we get the extents of the bounding box of this GameObject
-        // (only works if the object has a MeshRenderer component )
+        // Logically, each if case statement functions the same:
+        // We create a cylinder for each plane and then we stretch/squish it to match the
+        // extents of the object. In order to ensure that the radius of the ring is even,
+        // the ring will be stretched out by the maximum of the (i, j) length where i,j
+        // is dependent on the plane i.e. if we're looking at the xz-plane, then i,j correspond
+        // to x,z.
+        // After the cylinder is created and scaled accordingly, rotate it to match the plane.
         if (plane == "XZ") 
         {
             xzRing = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
