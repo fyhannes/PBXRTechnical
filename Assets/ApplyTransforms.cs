@@ -125,7 +125,7 @@ public class ApplyTransforms : MonoBehaviour
                 if (hit.collider != null)
                 {
                     target = hit.collider.gameObject;
-                    Debug.Log("Left-click hit: " + hit.collider.gameObject.name);
+                    // Debug.Log("Left-click hit: " + hit.collider.gameObject.name);
                 }
             }
         }
@@ -278,7 +278,7 @@ public class ApplyTransforms : MonoBehaviour
         // Short circuit to prevent shenanigans from happening when mouse doesn't move
         if (offset == 0) return;
         float sign = offset > 0 ? 1.0f : -1.0f;
-        Debug.Log(transform.localScale);
+        // Debug.Log(transform.localScale);
         if (target == xzScale)
         {
             transform.localScale += scaleXZChange * sign;
