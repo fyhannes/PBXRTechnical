@@ -14,7 +14,7 @@ public class ApplyTransforms : MonoBehaviour
     private float scaleFactor = 0.001f;
     private float scaleDamping = 0.1f;
     [SerializeField]
-    private float translateFactor = 10f;
+    private float translateFactor = 0.01f;
     [SerializeField]
     private float angularVelocity = 0.1f;
 
