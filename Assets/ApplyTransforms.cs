@@ -14,7 +14,7 @@ public class ApplyTransforms : MonoBehaviour
     private float scaleFactor = 0.001f;
     private float scaleDamping = 0.1f;
     [SerializeField]
-    private float translateFactor = 0.001f;
+    private float translateFactor = 10f;
     [SerializeField]
     private float angularVelocity = 0.1f;
 
@@ -56,10 +56,11 @@ public class ApplyTransforms : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Initialize the mouse positions just so we don't run into weird errors
         Vector3 mousePosition = Input.mousePosition;
         mousePos.x = mousePosition.x;
         mousePos.y = mousePosition.y;
-        // First, we create the three rings.
+        // We create the three rings.
         renderer = GetComponent<MeshRenderer>();
         extents = renderer.bounds.size;
         extents.x *= transform.localScale.x;
@@ -69,7 +70,11 @@ public class ApplyTransforms : MonoBehaviour
         CreateRing("XY");
         CreateRing("YZ");
 
-        // We assign mesh colliders to each ring here.
+        // We assign mesh colliders to each ring here. We do this because
+        // I use a Cylinder primitive to represent a ring, which by default
+        // has a Capsule Collider. Removing the capsule collider and replacing it
+        // with mesh colliders saves a lot of trouble. Ideally, there should be
+        // some prefab loaded in rather than using a Cylinder primitive though.
         foreach (Transform childObject in transform)
         {
             // First we get the Mesh attached to the child object
@@ -87,6 +92,7 @@ public class ApplyTransforms : MonoBehaviour
             }
         }
 
+        // Initialize variables that will be used in the update loop later.
         mainCamera = Camera.main;
         down = false;
         scaleXZChange = new Vector3(0, 0, scaleFactor);
@@ -119,7 +125,7 @@ public class ApplyTransforms : MonoBehaviour
                 if (hit.collider != null)
                 {
                     target = hit.collider.gameObject;
-                    // Debug.Log("Left-click hit: " + hit.collider.gameObject.name);
+                    Debug.Log("Left-click hit: " + hit.collider.gameObject.name);
                 }
             }
         }
@@ -241,6 +247,9 @@ public class ApplyTransforms : MonoBehaviour
         }
     }
     
+    /*
+     * 
+     */
     void RotateObj()
     {
         Vector3 mousePosition = Input.mousePosition;
@@ -291,18 +300,26 @@ public class ApplyTransforms : MonoBehaviour
         // Short circuit to prevent shenanigans from happening when mouse doesn't move
         if (offset == 0) return;
         float sign = offset > 0 ? 1.0f : -1.0f;
-        Debug.Log(transform.localPosition);
-        if (target == xzScale)
+        if (target == xzTranslate)
         {
-            transform.localPosition += translateXZChange * sign;
+            // Vector3 newPosition = transform.position + translateXZChange * sign;
+            // transform.position = newPosition;
+            transform.Translate(translateXZChange * sign);
         }
-        else if (target == yzScale)
+        else if (target == yzTranslate)
         {
-            transform.localPosition += translateYZChange * sign;
+            // Vector3 newPosition = transform.position + translateYZChange * sign;
+            // transform.position = newPosition;
+            transform.Translate(translateYZChange * sign);
         }
-        else if (target == xyScale)
+        else if (target == xyTranslate)
         {
-            transform.localPosition += translateXYChange * sign;
+            // Debug.Log(translateXYChange);
+            // Vector3 newPosition = transform.position + translateXYChange * sign;
+            // Debug.Log(newPosition);
+            // Debug.Log(transform.position);
+            // transform.position = newPosition;
+            transform.Translate(translateXYChange * sign);
         }
     }
 
